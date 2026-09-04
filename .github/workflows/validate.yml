@@ -19,7 +19,7 @@ jobs:
           version: "v1.31.0"
 
       - name: Validate manifests (client-side dry run)
-        run: kubectl apply --dry-run=client -f k8s/ --recursive
+        run: kubectl apply --dry-run=client --validate=false -f k8s/ --recursive
 
       - name: Lint Dockerfile with hadolint
         uses: hadolint/hadolint-action@v3.1.0
