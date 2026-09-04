@@ -1,0 +1,21 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ollama-pdb
+  namespace: {{ .Values.namespace }}
+spec:
+  maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ollama
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: open-webui-pdb
+  namespace: {{ .Values.namespace }}
+spec:
+  maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: open-webui

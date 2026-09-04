@@ -1,0 +1,41 @@
+namespace: projet-devops
+
+ollama:
+  image: my-ollama:hardened
+  imagePullPolicy: Never
+  containerPort: 11434
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: "1"
+    limits:
+      memory: 6Gi
+      cpu: "4"
+  storage: 5Gi
+  hostPath: /data/ollama
+
+openwebui:
+  image: ghcr.io/open-webui/open-webui:v0.10.2
+  imagePullPolicy: IfNotPresent
+  containerPort: 8080
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: "1"
+    limits:
+      memory: 3Gi
+      cpu: "2"
+  storage: 5Gi
+  hostPath: /data/openwebui
+  hpa:
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 70
+
+configMap:
+  OLLAMA_PORT: "11434"
+  OPENWEBUI_PORT: "8080"
+  OLLAMA_BASE_URL: "http://ollama-service:80"
+
+ingress:
+  host: projet-devops.local

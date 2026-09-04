@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: projet-devops
+
+  labels:
+    app: ollama
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+
+    spec:
+      containers:
+        - name: ollama
+          image: my-ollama:hardened
+          imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1"
+            limits:
+              memory: "6Gi"
+              cpu: "4"
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /home/llmuser/.ollama
+          envFrom:
+            - configMapRef:
+                name: projet-devops-config
+          ports:
+            - containerPort: 11434
+          livenessProbe:
+            exec:
+              command:
+                - ollama
+                - list
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - ollama
+                - list
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          
+          startupProbe:
+            exec:
+              command:
+                - ollama
+                - list
+            failureThreshold: 30
+            periodSeconds: 10
+      volumes:
+            - name: ollama-data
+              persistentVolumeClaim:
+                claimName: ollama-pvc
+
+    
