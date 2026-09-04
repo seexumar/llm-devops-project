@@ -13,13 +13,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: "v1.31.0"
+      - name: Install kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
+          sudo mv kubeconform /usr/local/bin/
 
-      - name: Validate manifests (client-side dry run)
-        run: kubectl apply --dry-run=client --validate=false -f k8s/ --recursive
+      - name: Validate manifests (offline schema check, no cluster needed)
+        run: find k8s -name '*.yaml' -print0 | xargs -0 kubeconform -strict -summary
 
       - name: Lint Dockerfile with hadolint
         uses: hadolint/hadolint-action@v3.1.0
