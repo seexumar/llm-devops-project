@@ -4,7 +4,7 @@ Sept fonctionnalités bonus ont été implémentées et testées sur le cluster 
 
 ## 1. NetworkPolicy
 
-**Fichier :** `k8s/networkPolicy.yaml`
+**Fichier :** `k8s/11-networkpolicy.yaml`
 
 Deux politiques réseau ont été mises en place. `ollama-netpol` autorise uniquement le pod `open-webui` à accéder à Ollama sur le port `11434`. `open-webui-netpol` contrôle quant à elle l'accès entrant à Open WebUI sur le port `8080`.
 
@@ -14,7 +14,7 @@ L'egress reste volontairement ouvert afin de permettre le téléchargement des m
 
 ## 2. PodDisruptionBudget
 
-**Fichier :** `k8s/podDisruptionBudget.yaml`
+**Fichiers :** `k8s/12-ollama-pdb.yaml`, `k8s/13-openwebui-pdb.yaml`
 
 Un `PodDisruptionBudget` avec `maxUnavailable: 0` est configuré pour Ollama et Open WebUI afin d'empêcher leur éviction volontaire sans possibilité de remplacement.
 
@@ -22,7 +22,7 @@ Cette configuration est toutefois restrictive avec un seul replica : un `kubectl
 
 ## 3. HorizontalPodAutoscaler
 
-**Fichier :** `k8s/openwebui/hpa.yaml`
+**Fichier :** `k8s/14-openwebui-hpa.yaml`
 
 Un HPA permet à Open WebUI de varier entre 1 et 3 replicas lorsque l'utilisation CPU dépasse le seuil configuré de 70 %. Son fonctionnement repose sur `metrics-server`.
 

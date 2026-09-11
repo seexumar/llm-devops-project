@@ -1,17 +1,6 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: ollama-pdb
-  namespace: projet-devops
-spec:
-  maxUnavailable: 0
-  selector:
-    matchLabels:
-      app: ollama
----
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
   name: open-webui-pdb
   namespace: projet-devops
 spec:
